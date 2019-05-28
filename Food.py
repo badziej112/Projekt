@@ -1,15 +1,14 @@
-from Materials import AbstractMaterial
+import random
+from AbstractResource import AbstractResource
 
-class Food(AbstractMaterial):
+class Food(AbstractResource):
 
+    def __init__(self):
+        super().__init__("F")
+        self.number = random.randint(10,100)
 
-    def __init__(self, number):
-        super().__init__(number, "F")
-        self.object_food = {"F": number}
+    def generate(self):
+        return {"F": self.number}
 
-    def feed(self):
+    def use(self):
         pass
-
-
-
-#food1 = Food(20, "F")
