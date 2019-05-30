@@ -7,7 +7,7 @@ class Material(AbstractResource):
         super().__init__("M")
         self.number = random.randint(10,100)
 
-    def generate(self):
+    def generate(self): #generowanie materiałów
         return {"M": self.number}
 
     def use(self):
