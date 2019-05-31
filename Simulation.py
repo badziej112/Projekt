@@ -1,4 +1,5 @@
 from Mapa import Mapa
+
 class Simulation:
 
     def __init__(self):
@@ -36,6 +37,14 @@ class Simulation:
         print(mapa.fraction1.food) #surowce frakcji po zbiorach
 
         mapa.print_object(1, 1) #surowce po zbiorach
+
+        mapa.build_mine(mapa.fraction1, 1, 1) #zbudowanie kopalni
+
+        mapa.show() #pokazanie mapy po zbudowaniu kopalni
+
+        mapa.build_city(mapa.fraction2, 10, 10) #zbudowanie miasta innej frakcji
+
+        mapa.show()  #pokazanie miasta innej frakcji na mapie
 
 
        #mapa.add(Fraction("T", 1, 1))  # tak dodawac frakcje xd

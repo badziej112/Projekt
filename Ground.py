@@ -2,6 +2,7 @@ from Food import Food
 from Material import Material
 from City import City
 from Farm import Farm
+from Mine import Mine
 
 class Ground():
 
@@ -25,18 +26,26 @@ class Ground():
 
     def build_city(self, fraction, x, y): #budowanie miasta
         self.city = City(x, y)
-        self.city.build(fraction)
+        self.city.build(fraction, 1000)
         self.fraction = fraction
         self.building = {}
-        self.building = self.city.add_city(fraction)
+        self.building = self.city.add_building(fraction)
         return self.building
 
     def build_farm(self, fraction, x, y): #budowanie farmy
         self.farm = Farm(x, y)
-        self.farm.build(fraction)
+        self.farm.build(fraction, 500)
         self.fraction = fraction
         self.building = {}
-        self.building = self.farm.add_farm(fraction)
+        self.building = self.farm.add_building(fraction)
+        return self.building
+
+    def build_mine(self, fraction, x, y): #budowanie kopalni
+        self.mine = Mine(x, y)
+        self.mine.build(fraction, 500)
+        self.fraction = fraction
+        self.building = {}
+        self.building = self.mine.add_building(fraction)
         return self.building
 
     def harvest(self, fraction, x, y): #zbiory jedzenia

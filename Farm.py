@@ -1,11 +1,10 @@
 import random
+from AbstractBuilding import AbstractBuilding
 from Event import Event
-class Farm:
+class Farm(AbstractBuilding):
 
     def __init__(self, x, y):
-        self.symbol = "Fa"
-        self.x = x
-        self.y = y
+        super().__init__(x, y, "Fa")
 
     def harvest(self, fraction):
         pogoda = Event()
@@ -21,13 +20,9 @@ class Farm:
         if (pogoda.type < 0):
             fraction.food = fraction.food + b
             return  b
-        #self.base_object.update("F" = "F" - a)
 
-    def build(self, fraction):
-        if (fraction.material > 500):
-            fraction.material = fraction.material - 500
+    def build(self, fraction, a):
+        super().build(fraction, a)
 
-    def add_farm(self, fraction):
-        return {"Fa"+fraction.symbol: 1}
 
 

@@ -7,6 +7,7 @@ class Mapa:
         self.size = size
         self.ground_objects = {}
         self.fraction1 = Fraction("T", 1, 1)
+        self.fraction2 = Fraction("W", 10, 10)
 
     def draw(self): #wstępne narysowanie mapy
             for y in range(1, self.size + 1):
@@ -41,6 +42,11 @@ class Mapa:
         self.ground_objects[x, y].update_object(self.base_object.build_farm(fraction, x, y))
         self.ground_objects[x, y].symbol = self.ground_objects[x, y].symbol + "Fa" + fraction.symbol
 
+    def build_mine(self, fraction, x, y): #budowanie kopalni
+        self.base_object = Ground(x, y)
+        self.ground_objects[x, y].update_object(self.base_object.build_mine(fraction, x, y))
+        self.ground_objects[x, y].symbol = self.ground_objects[x, y].symbol + "Mi" + fraction.symbol
+
     def harvest(self, fraction, x, y): #zbiory jedzenia przez farme
         self.base_object = Ground(x, y)
         new_value = {"F": self.ground_objects[x,y].base_object['F'] - self.base_object.harvest(fraction, x, y)}
@@ -55,28 +61,21 @@ class Mapa:
 
     def check_neighbour(self, x, y):
         if (x < self.size):
-            if (self.objects_on_map[x, y].symbol == self.objects_on_map[x + 1, y]):
+            if (self.ground_objects[x, y].symbol == self.ground_objects[x + 1, y]):
                 return True
         if (x > 1):
-            if (self.objects_on_map[x, y].symbol == self.objects_on_map[x - 1, y]):
+            if (self.ground_objects[x, y].symbol == self.ground_objects[x - 1, y]):
                 return True
         if (y < self.size):
-            if (self.objects_on_map[x, y].symbol == self.objects_on_map[x, y + 1]):
+            if (self.ground_objects[x, y].symbol == self.ground_objects[x, y + 1]):
                 return True
         if (y > 1):
-            if (self.objects_on_map[x, y].symbol == self.objects_on_map[x, y - 1]):
+            if (self.ground_objects[x, y].symbol == self.ground_objects[x, y - 1]):
                 return True
         else:
             return False
 
 
-#mapa = Mapa(10)
-
-#mapa.draw()
-
-#mapa.show()
-
-#mapa.print_object(2,2)
 
 
 
