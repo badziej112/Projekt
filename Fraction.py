@@ -6,7 +6,7 @@ class Fraction:  # definiuje właściwości całej frakcji
         self.points = 1
         self.multipler = 1.2
         self.food = 100
-        self.material = 10000
+        self.material = 5000
         self.x = x
         self.y = y
 
@@ -20,9 +20,3 @@ class Fraction:  # definiuje właściwości całej frakcji
         print("Symbol: ", self.symbol)
         print("Food: ", self.food)
         print("Materials:", self.material)
-
-    def check_resources(self):  # potem trza to wywalic
-        return 1
-
-    def harvest_materials(self, fraction): #wstępne aktualizowanie zasobów
-        self.material = self.material + random.randint(1, 10)

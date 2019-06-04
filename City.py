@@ -19,4 +19,4 @@ class City(AbstractBuilding):
 
     def build(self, fraction, a): #budowa miasta
         super().build(fraction, a)
-        self.level += 1
+        self.level += 1 #nwm po co to, to chyba twoje, potem się jakoś wykorzysta

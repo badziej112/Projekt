@@ -5,7 +5,7 @@ class Food(AbstractResource):
 
     def __init__(self):
         super().__init__("F")
-        self.number = random.randint(10,100)
+        self.number = random.randint(1000,10000)
 
     def generate(self): #losowe wygenerowanie liczby jedzenia
         return {"F": self.number}
