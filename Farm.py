@@ -9,8 +9,8 @@ class Farm(AbstractBuilding):
     def harvest(self, fraction): #zbiór jedzenia w zależności od pogody
         pogoda = Event()
         pogoda.set_weather()#ustawienie pogody
-        a = random.randint(80, 150) #losowa wartość przy dobrym zbiorze
-        b = random.randint(10, 80) #losowa wartość przy słabym zbiorze
+        a = random.randint(50, 100) #losowa wartość przy dobrym zbiorze
+        b = random.randint(5, 50) #losowa wartość przy słabym zbiorze
         if (pogoda.type > 0): #dużo jedzenia bo dobra pogoda
             fraction.food = (fraction.food + a * pogoda.type)
             return  a

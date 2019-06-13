@@ -2,6 +2,7 @@
 class Fraction:  # definiuje właściwości całej frakcji
 
     def __init__(self, symbol, x, y):
+
         self.symbol = symbol
         self.points = 0
         self.food = 5000
@@ -10,6 +11,7 @@ class Fraction:  # definiuje właściwości całej frakcji
         self.y = y
 
     def show_fraction(self): #pokazanie frakcji (pomocnicze)
+
         print("Symbol: ", self.symbol)
         print("Food: ", self.food)
         print("Materials:", self.material)

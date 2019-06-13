@@ -1,8 +1,5 @@
 from Food import Food
 from Material import Material
-from City import City
-from Farm import Farm
-from Mine import Mine
 
 class Ground():
 
@@ -21,45 +18,11 @@ class Ground():
     def update_object(self, obj): #aktualizowanie oobszaru na mapie np. przy budowaniu
         self.base_object.update(obj)
 
-    def build_city(self, fraction, x, y, population): #budowanie miasta
-        self.city = City(x, y, population)
-        self.city.build(fraction, 1000) #zbudowanie miasta
-        self.building = {} #pusty słownik żeby dodać wartości
-        self.building = self.city.add_building(fraction) #dodanie do słownika miasta i jego wartości
-        fraction.points += 100 #zwiększenie liczby punktów rozwoju frakcji za budowę budynku
+    def build(self, building_class, cost, fraction):    #budowanie
+        self.building = building_class
+        self.building.build(fraction, cost) #zbudowanie budynku
+        self.building_dict = {}
+        self.building = self.building.add_building(fraction)    #dodanie do słownika danych budynku
+        fraction.points += 50   #zwiększenie liczby punktów rozwoju frakcji za budowę
         return self.building
-
-    def build_farm(self, fraction, x, y): #budowanie farmy (komentarze analogiczne jak w build_city())
-        self.farm = Farm(x, y)
-        self.farm.build(fraction, 500)
-        self.building = {}
-        self.building = self.farm.add_building(fraction)
-        fraction.points += 50
-        return self.building
-
-    def build_mine(self, fraction, x, y): #budowanie kopalni (komentarze analogiczne jak w build_city()
-        self.mine = Mine(x, y)
-        self.mine.build(fraction, 500)
-        self.building = {}
-        self.building = self.mine.add_building(fraction)
-        fraction.points += 50
-        return self.building
-
-    def harvest(self, fraction, x, y): #zbiory jedzenia
-        self.farm = Farm(x, y)
-        return self.farm.harvest(fraction)
-
-    def collect(self, fraction, x, y): #zbiory materiałów
-        self.mine = Mine(x, y)
-        return  self.mine.collect(fraction)
-
-    def consume(self, fraction, x, y, population): #spożycie jedzenia przez frakcję
-        self.city = City(x, y, population)
-        if self.city.consume(fraction) != True: # jeśli jest jedzenie, punkty frakcji zwiększają się
-            self.city.consume(fraction)
-            fraction.points += self.city.population
-        else:
-            self.city.consume(fraction)
-            fraction.points -= self.city.population * 2 # jeśli nie ma jedzenia zmniejszają
-        return self.city.population
 

@@ -1,4 +1,7 @@
 from Ground import Ground
+from City import City
+from Farm import Farm
+from Mine import Mine
 from Fraction import Fraction
 import random
 
@@ -37,57 +40,71 @@ class Mapa:
 
     def build_city(self, fraction, x, y, population): #budowanie miasta (nwm jak zbić wszystkie funckcje budujące w 1)
         self.base_object = Ground(x, y)
-        self.ground_objects[x, y].update_object(self.base_object.build_city(fraction, x, y, population)) #zaktualizowanie słownika danego pola na mapie o symbol i wartość miasta
+        self.ground_objects[x, y].update_object(self.base_object.build(City(x, y, population), 1000, fraction)) #zaktualizowanie słownika danego pola na mapie o symbol i wartość miasta
         self.ground_objects[x, y].symbol = self.ground_objects[x, y].symbol + "C" + fraction.symbol #dodanie symbolu miasta ogólnie (żeby było widać na funkcji mapa.show())
 
     def build_farm(self, fraction, x, y): #budowanie farm
         self.base_object = Ground(x, y)
-        self.ground_objects[x, y].update_object(self.base_object.build_farm(fraction, x, y))    #zaktualizowanie słownika danego pola na mapie o symbol i wartość farmy
+        self.ground_objects[x, y].update_object(self.base_object.build(Farm(x, y), 500, fraction))    #zaktualizowanie słownika danego pola na mapie o symbol i wartość farmy
         self.ground_objects[x, y].symbol = self.ground_objects[x, y].symbol + "Fa" + fraction.symbol    #dodanie symbolu farmy ogólnie (żeby było widać na funkcji mapa.show())
 
     def build_mine(self, fraction, x, y): #budowanie kopalni
         self.base_object = Ground(x, y)
-        self.ground_objects[x, y].update_object(self.base_object.build_mine(fraction, x, y))    #zaktualizowanie słownika danego pola na mapie o symbol i wartość kopalni
+        self.ground_objects[x, y].update_object(self.base_object.build(Mine(x, y), 500, fraction))    #zaktualizowanie słownika danego pola na mapie o symbol i wartość kopalni
         self.ground_objects[x, y].symbol = self.ground_objects[x, y].symbol + "Mi" + fraction.symbol    #dodanie symbolu kopalni ogólnie (żeby było widać na funkcji mapa.show())
 
-    def harvest(self, fraction, x, y): #zbiory jedzenia przez farme
-        self.base_object = Ground(x, y)
-        if self.ground_objects[x, y].base_object['F'] >= self.base_object.harvest(fraction, x, y):
-            new_value = {"F": self.ground_objects[x, y].base_object['F'] - self.base_object.harvest(fraction, x, y)}#wartość zebranego surowca
+    def collect_food(self, fraction, x, y): #zbiory jedzenia przez farme
+        self.building = Farm(x, y)
+        if self.ground_objects[x, y].base_object['F'] >= self.building.harvest(fraction):
+            new_value = {"F": self.ground_objects[x, y].base_object['F'] - self.building.harvest(fraction)}#wartość zebranego surowca
             self.ground_objects[x ,y].base_object.update(new_value)#wyciągnięcie z mapy tej samej ilości surowca
-        else:
-            pass
 
-    def collect(self, fraction, x, y): #zbiory materiałów z kopalnie
-        self.base_object = Ground(x, y)
-        if self.ground_objects[x, y].base_object['M'] >= self.base_object.collect(fraction, x, y):
-            new_value = {"M": self.ground_objects[x, y].base_object['M'] - self.base_object.collect(fraction, x, y)}#wartość zebranego surowca
+    def collect_resources(self, fraction, x, y): #zbiory materiałów z kopalnie
+        self.building = Mine(x, y)
+        if self.ground_objects[x, y].base_object['M'] >= self.building.collect(fraction):
+            new_value = {"M": self.ground_objects[x, y].base_object['M'] - self.building.collect(fraction)}#wartość zebranego surowca
             self.ground_objects[x, y].base_object.update(new_value) #wyciągnięcie z mapy tej samej ilości surowca
-        else:
-            pass
 
     def print_object(self, x, y): #pomocnicze drukowanie obiektów na polu
         print(self.ground_objects[x, y].base_object)
 
+
     def auto_build(self, x, y, fraction, population): #automatyczne budowanie budynków jeśli to możliwe
+        position = []
+        pos_x = []
+        pos_y = []
+
         for b in range(y-1, y+2):
             for a in range(x-1, x+2):
-                if(a > 0 and b > 0 and a <= self.size and b <= self.size): #ify żeby nie zbudowało poza mapą
-                    if(self.ground_objects[a, b].symbol == "X" and fraction.material >= 1000): # najpierw miasta
-                        self.build_city(fraction, a, b, population)
-                    if (self.ground_objects[a, b].symbol == "XC" + fraction.symbol and fraction.material >= 500): #potem kopalnie
-                        self.build_mine(fraction, a, b)
-                    if (self.ground_objects[a, b].symbol == "XC" + fraction.symbol + "Mi" + fraction.symbol  and fraction.material >= 500): #na końcu farmy
-                        self.build_farm(fraction, a, b)
-                    if self.ground_objects[a, b].symbol.__contains__("C"):
-                        if (self.ground_objects[a, b].symbol[1] == "C" and self.ground_objects[a, b].symbol[2] != fraction.symbol):
-                            war = random.randint(0,4)
-                            if war == 1:
-                                print("Atakuje frakcja: ", fraction.symbol)
-                                self.base_object = Ground(a, b)
-                                self.base_object.update_object_new()
-                                self.ground_objects[a, b] = self.base_object
-                                self.build_city(fraction, a, b, population)
+                if (a > 0 and b > 0 and a <= self.size and b <= self.size):  # ify żeby nie zbudowało poza mapą
+                    position.append((a, b))
+
+        for i in range(position.__len__()):
+            for j in range(2):
+                if j == 0:
+                    pos_x.append(position[i][j])
+                if j == 1:
+                    pos_y.append(position[i][j])
+
+        position.clear()
+        while pos_x.__len__() != 0:
+            a = random.randint(0, pos_x.__len__() - 1)
+            if (self.ground_objects[pos_x[a], pos_y[a]].symbol == "X" and fraction.material >= 1000):  # najpierw miasta
+                self.build_city(fraction, pos_x[a], pos_y[a], population)
+            if (self.ground_objects[pos_x[a], pos_y[a]].symbol == "XC" + fraction.symbol and fraction.material >= 500):  # potem kopalnie
+                self.build_mine(fraction, pos_x[a], pos_y[a])
+            if (self.ground_objects[pos_x[a], pos_y[a]].symbol == "XC" + fraction.symbol + "Mi" + fraction.symbol and fraction.material >= 500):  # na końcu farmy
+                self.build_farm(fraction, pos_x[a], pos_y[a])
+            if self.ground_objects[pos_x[a], pos_y[a]].symbol.__contains__("C"):
+                if (self.ground_objects[pos_x[a], pos_y[a]].symbol[1] == "C" and self.ground_objects[pos_x[a], pos_y[a]].symbol[2] != fraction.symbol):
+                    war = random.randint(0, 4)
+                    if war == 1:
+                        self.base_object = Ground(pos_x[a], pos_y[a])
+                        self.base_object.update_object_new()
+                        self.ground_objects[pos_x[a], pos_y[a]] = self.base_object
+                        self.build_city(fraction, pos_x[a], pos_y[a], population)
+            pos_x.remove(pos_x[a])
+            pos_y.remove(pos_y[a])
 
     def check_city(self, fraction): #funkcja sprawdzająca pozycje miast danej frakcji (te funkcje można chyba jakoś zbić w jedną)
         position = [] #lista tupli pozycji miast
@@ -119,8 +136,14 @@ class Mapa:
         print("------------")
 
     def consume(self, fraction, x, y, population): #spożycie jedzenie przez ludzi w miastach frakcji
-        self.base_object = Ground(x, y)
-        return self.base_object.consume(fraction, x, y, population)
+        self.city = City(x, y, population)
+        if self.city.consume(fraction) != True:  # jeśli jest jedzenie, punkty frakcji zwiększają się
+            self.city.consume(fraction)
+            fraction.points += self.city.population
+        else:
+            self.city.consume(fraction)
+            fraction.points -= self.city.population * 2  # jeśli nie ma jedzenia zmniejszają
+        return self.city.population
 
 
 
