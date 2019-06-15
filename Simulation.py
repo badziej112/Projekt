@@ -15,7 +15,7 @@ class Simulation:
     @staticmethod
     def scan_map(fraction, mapa):
 
-        #funkcja sprawdzająca czy cała mapa nie jest zajęta przez 1 frakcję
+        """funkcja sprawdzająca czy cała mapa nie jest zajęta przez 1 frakcję"""
 
         a = []
         for y in range(1, mapa.size + 1): #dodaje do listy liczbę 1 gdy jest na mapie budynek danej frakcji
@@ -34,44 +34,59 @@ class Simulation:
             exit() #koniec
 
     @classmethod
-    def check_win(cls, a, b ,c ,d, mapa):
+    def check_win(cls, a, b ,c ,d, mapa, points):
 
-        #sprawdzenie czy frakcja nie przekroczyła punktów rozwoju
+        """sprawdzenie czy frakcja nie przekroczyła punktów rozwoju"""
 
-        cls.req_points = 80000 #wymagane punkty rozwoju do wygrania
 
         if a != None: #sprawdzenie czy frakcja istnieje, potem sprawdza zwycięstwo
             cls.scan_map(b, mapa)
-            if a.points >= cls.req_points:
+            if a.points >= points:
                 name = a.symbol
-                print("Wygrała frakcja {}{}!".format("z symbolem: ", name))
+                win = "Wygrala frakcja {}{}!".format("z symbolem: ", name)
+                print(win)
+                with open("sim_save.txt",mode='a',  encoding='UTF8') as  save_file:  # zapisz do pliku wszystkich danych potrzebnych do odtworzenia symulacji
+                    save_simulation = csv.writer(save_file, quotechar='"', quoting=csv.QUOTE_MINIMAL)
+                    save_simulation.writerow([win])
                 exit()
 
         if b != None:
             cls.scan_map(b, mapa)
-            if b.points >= cls.req_points:
+            if b.points >= points:
                 name = b.symbol
-                print("Wygrała frakcja {}{}!".format("z symbolem: ", name))
+                win = "Wygrala frakcja {}{}!".format("z symbolem: ", name)
+                print(win)
+                with open("sim_save.txt", mode='a',  encoding='UTF8') as  save_file:  # zapisz do pliku wszystkich danych potrzebnych do odtworzenia symulacji
+                    save_simulation = csv.writer(save_file,  quotechar='"', quoting=csv.QUOTE_MINIMAL)
+                    save_simulation.writerow([win])
                 exit()
 
         if c != None:
             cls.scan_map(b, mapa)
-            if c.points >= cls.req_points:
+            if c.points >= points:
                 name = c.symbol
-                print("Wygrała frakcja {}{}!".format("z symbolem: ", name))
+                win = "Wygrala frakcja {}{}!".format("z symbolem: ", name)
+                print(win)
+                with open("sim_save.txt", mode='a', encoding='UTF8') as  save_file:  # zapisz do pliku wszystkich danych potrzebnych do odtworzenia symulacji
+                    save_simulation = csv.writer(save_file, quotechar='"', quoting=csv.QUOTE_MINIMAL)
+                    save_simulation.writerow([win])
                 exit()
 
         if d != None:
             cls.scan_map(b, mapa)
-            if d.points >= cls.req_points:
+            if d.points >= points:
                 name = d.symbol
-                print("Wygrała frakcja {}{}!".format("z symbolem: ", name))
+                win = "Wygrala frakcja {}{}!".format("z symbolem: ", name)
+                print(win)
+                with open("sim_save.txt",mode='a',  encoding='UTF8') as  save_file:  # zapisz do pliku wszystkich danych potrzebnych do odtworzenia symulacji
+                    save_simulation = csv.writer(save_file, quotechar='"', quoting=csv.QUOTE_MINIMAL)
+                    save_simulation.writerow([win])
                 exit()
 
     @staticmethod
     def check_pos(a, object):
 
-        #Metoda sprawdzająca pozycje wszystkich miast danej frakcji
+        """Metoda sprawdzająca pozycje wszystkich miast danej frakcji"""
 
         position = object.check_city(a)  # zebranie współrzędnych miast danej frakcji do 1 zmiennej
         x = []  # puste listy do ktorych będą wrzucane współrzędne
@@ -87,7 +102,7 @@ class Simulation:
     @staticmethod
     def check_mine(a, object):
 
-        #Metoda sprawdzająca pozycje wszystkich kopalni danej frakcji
+        """Metoda sprawdzająca pozycje wszystkich kopalni danej frakcji"""
 
         position = object.check_mine(a)
         for i in range(position.__len__()):  # pętla zbierająca surowce z każdej kopalni
@@ -101,7 +116,7 @@ class Simulation:
     @staticmethod
     def check_farm(a, object):
 
-        # Metoda sprawdzająca pozycje wszystkich farm danej frakcji
+        """ Metoda sprawdzająca pozycje wszystkich farm danej frakcji"""
 
         position = object.check_farm(a)  # zebranie współrzędnych wszystkich farm danej frakcji do 1 zmiennej
         for i in range(position.__len__()):  # pętla zbierająca jedzenie z każdej farmy
@@ -113,7 +128,7 @@ class Simulation:
             object.collect_food(a, x, y)  # zbiór
 
     def start(self):
-
+        """Rozpoczyna symulacje"""
         while self.counter < 99:
             if self.counter == 0: #czynność startowa
                 self.mapa.draw() #narysowanie mapy
@@ -206,31 +221,41 @@ class Simulation:
             self.mapa.show_fraction(self.mapa.fraction4)
 
             self.mapa.show() #pokazanie mapy po zmianach
-            if Simulation.check_win(self.mapa.fraction1, self.mapa.fraction2, self.mapa.fraction3, self.mapa.fraction4, self.mapa) == str: #sprawdzenie zwycięstwa na końcu pętli
-                win = Simulation.check_win(self.mapa.fraction1, self.mapa.fraction2, self.mapa.fraction3, self.mapa.fraction4)
+            if Simulation.check_win(self.mapa.fraction1, self.mapa.fraction2, self.mapa.fraction3, self.mapa.fraction4, self.mapa, self.req_points) == str: #sprawdzenie zwycięstwa na końcu pętli
+                win = Simulation.check_win(self.mapa.fraction1, self.mapa.fraction2, self.mapa.fraction3, self.mapa.fraction4, self.req_points)
                 print(win)
 
             with open("sim_save.txt", mode='w') as  save_file: #zapisz do pliku wszystkich danych potrzebnych do odtworzenia symulacji
-                save_simulation = csv.writer(save_file, delimiter=',', quotechar='"', quoting = csv.QUOTE_MINIMAL)
+                save_simulation = csv.writer(save_file, delimiter=" ", quotechar='"', quoting = csv.QUOTE_MINIMAL)
+                fractions = [self.mapa.fraction1, self.mapa.fraction2, self.mapa.fraction3, self.mapa.fraction4]
 
-                save_simulation.writerow([
-                    self.counter,
-                    self.req_points,
-                    self.mapa.fraction1.symbol, self.mapa.fraction1.points, self.mapa.fraction1.food, self.mapa.fraction1.material, self.mapa.fraction1.x, self.mapa.fraction1.y,
-                    self.mapa.fraction2.symbol, self.mapa.fraction2.points, self.mapa.fraction2.food, self.mapa.fraction2.material, self.mapa.fraction2.x, self.mapa.fraction2.y,
-                    self.mapa.fraction3.symbol, self.mapa.fraction3.points, self.mapa.fraction3.food, self.mapa.fraction3.material, self.mapa.fraction3.x, self.mapa.fraction3.y,
-                    self.mapa.fraction4.symbol, self.mapa.fraction4.points, self.mapa.fraction4.food, self.mapa.fraction4.material, self.mapa.fraction4.x, self.mapa.fraction4.y,
-                    self.city_population
-                 ])
+                save_simulation.writerow(["Symulacja zakończyła się po", self.counter, "cyklach."])
+                save_simulation.writerow(["Próg punktów zwycięstwa:", self.req_points])
+                save_simulation.writerow(["Wielkość mapy", self.mapa.size])
+                save_simulation.writerow(["_______________________________________________________"])
+
+                for fraction in fractions:
+                    save_simulation.writerow(["Frakcja:", fraction.symbol])
+                    save_simulation.writerow(["Punkty:", int(fraction.points)])
+                    save_simulation.writerow(["Ilość jedzenia:", int(fraction.food), " Ilość materiałów:", int(fraction.material)])
+                    save_simulation.writerow(["Pozycja startowa:", (fraction.x, fraction.y)])
+                    save_simulation.writerow(["_______________________________________________________"])
 
                 for y in range(1, self.mapa.size + 1):
                     for x in range(1, self.mapa.size + 1):
-                        save_simulation.writerow([self.mapa.ground_objects[x, y].symbol, self.mapa.ground_objects[x, y].base_object])
+                        save_simulation.writerow(["Budynki na polu", (x, y), ":", self.mapa.ground_objects[x, y].symbol])
+
+
+
+                if self.counter == 98:
+                    save_simulation.writerow(["REMIS!"])
 
 
             time.sleep(0.25)
             self.counter += 1
 
         print("REMIS!") #Wyświetla remis jeżeli żadna frakcja nie wygrała po wszystkich cyklach
+
         exit()
+        """Zakańcza działanie programu"""
 

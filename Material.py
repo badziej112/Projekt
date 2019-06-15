@@ -8,6 +8,9 @@ class Material(AbstractResource):
         self.number = random.randint(10, 400)
 
     def generate(self): #generowanie materiałów
+
+        """Wygenerowanie losowej ilości materałów."""
+
         return {"M": self.number}
 
 

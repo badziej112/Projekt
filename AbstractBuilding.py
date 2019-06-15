@@ -8,10 +8,20 @@ class AbstractBuilding(metaclass=ABCMeta):
         self.x = x
         self.y = y
 
-    @abstractmethod
-    def build(self, fraction, a): #zbudowanie budynku i odjęcie jego kosztu od materiałów frakcji
-        if(fraction.material > a):
-            fraction.material = fraction.material - a
+    def build_job(self, fraction):
+
+        """Metoda wirtualna. Budynek wykonuje swoje zadanie."""
+
+        pass
+
+    def build(self, fraction): #zbudowanie budynku i odjęcie jego kosztu od materiałów frakcji
+
+        """Metoda wirtualna. Buduje budynek."""
+
+        pass
 
     def add_building(self, fraction): #dodanie symbolu budynku do mapa.show()
+
+        """Metoda zwraca symbol budynku i frakcji."""
+
         return {self.symbol+fraction.symbol: 1}

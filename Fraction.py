@@ -12,6 +12,8 @@ class Fraction:  # definiuje właściwości całej frakcji
 
     def show_fraction(self): #pokazanie frakcji (pomocnicze)
 
+        """Pokazuje dane frakcji."""
+
         print("Symbol: ", self.symbol)
         print("Food: ", self.food)
         print("Materials:", self.material)
